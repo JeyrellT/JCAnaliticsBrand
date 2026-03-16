@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area
 } from 'recharts';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import Lenis from 'lenis';
 import CustomCursor from './components/ui/CustomCursor';
 import MagneticButton from './components/ui/MagneticButton';
@@ -120,6 +120,10 @@ const App = () => {
     };
   }, [isMobileViewport, isTouchDevice]);
 
+  // Scroll progress bar
+  const { scrollYProgress: pageScrollProgress } = useScroll();
+  const scaleProgress = useSpring(pageScrollProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+
   // Navbar & Hero Scroll logic
   const { scrollY } = useScroll();
   const heroRef = useRef(null);
@@ -169,6 +173,13 @@ const App = () => {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 font-sans selection:bg-blue-500 selection:text-white overflow-x-hidden">
       {!isTouchDevice && !isMobileViewport && <CustomCursor />}
+
+      {/* Scroll Progress Bar */}
+      <motion.div
+        className="scroll-progress-bar"
+        style={{ scaleX: scaleProgress }}
+      />
+
       <div className="fixed inset-0 noise-overlay pointer-events-none z-50 mix-blend-overlay" />
       <Background3D isMobile={isMobileViewport || isTouchDevice || prefersReducedMotion} />
       
@@ -241,7 +252,7 @@ const App = () => {
                 </div>
               </FadeInUp>
               <FadeInUp delay={0.2}>
-                <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-[1.1] mb-6 tracking-normal">
+                <h1 className="font-display text-[1.75rem] sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-[1.15] sm:leading-[1.1] mb-5 sm:mb-6 tracking-normal">
                   <SplitText text="¿Cuánto tiempo pierde tu equipo " delay={0.1} />
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300 inline-block overflow-hidden">
                     <SplitText text="generando reportes?" delay={0.6} />
@@ -249,10 +260,10 @@ const App = () => {
                 </h1>
               </FadeInUp>
               <FadeInUp delay={0.3}>
-                <p className="text-lg sm:text-xl text-slate-300 mb-6 leading-relaxed max-w-xl font-sans">
+                <p className="text-base sm:text-lg md:text-xl text-slate-300 mb-5 sm:mb-6 leading-relaxed max-w-xl font-sans">
                   El tiempo que tu equipo dedica hoy a llenar Excels, podrías estar invirtiéndolo en analizar dashboards <strong>en tiempo real</strong>.
                 </p>
-                <div className="text-base sm:text-lg text-emerald-300 mb-8 sm:mb-10 font-medium max-w-xl font-sans border-l-2 border-emerald-400 pl-4 py-1">
+                <div className="text-sm sm:text-base md:text-lg text-emerald-300 mb-7 sm:mb-10 font-medium max-w-xl font-sans border-l-2 border-emerald-400 pl-4 py-1">
                   Firma de analítica enfocada en PYMEs de la Gran Área Metropolitana. Resultados visibles en 14 días o no cobramos.
                 </div>
               </FadeInUp>
@@ -302,21 +313,21 @@ const App = () => {
       </header>
 
       {/* Strip de Credibilidad y El Problema */}
-      <section className="relative z-20 py-16 bg-white border-b border-slate-200">
+      <section className="relative z-20 py-12 sm:py-16 bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex flex-wrap justify-between items-center gap-8 mb-20 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
-             <div className="font-display font-black text-2xl text-slate-800 tracking-wider">Retail & Consumo</div>
-             <div className="font-display font-black text-3xl text-slate-800 tracking-tighter">Sector Energético</div>
-             <div className="font-display font-bold text-2xl text-slate-800 tracking-widest italic">Logística & Distribución</div>
-             <div className="font-display text-2xl font-bold text-slate-800 tracking-tight">Servicios Financieros</div>
+          <div className="flex flex-wrap justify-between items-center gap-4 sm:gap-8 mb-12 sm:mb-20 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+             <div className="font-display font-black text-base sm:text-2xl text-slate-800 tracking-wider">Retail & Consumo</div>
+             <div className="font-display font-black text-lg sm:text-3xl text-slate-800 tracking-tighter">Sector Energético</div>
+             <div className="font-display font-bold text-base sm:text-2xl text-slate-800 tracking-widest italic">Logística & Distribución</div>
+             <div className="font-display text-base sm:text-2xl font-bold text-slate-800 tracking-tight">Servicios Financieros</div>
           </div>
 
-          <div className="text-center mb-16">
+          <div className="text-center mb-10 sm:mb-16">
             <FadeInUp>
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-full text-sm font-bold mb-4 border border-red-100">
-                <ShieldCheck size={16} /> Lo que descubrimos en cada PYME que auditamos
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-full text-xs sm:text-sm font-bold mb-4 border border-red-100">
+                <ShieldCheck size={14} /> Lo que descubrimos en cada PYME que auditamos
               </div>
-              <h2 className="font-display text-4xl md:text-5xl lg:text-5xl font-bold text-slate-900 mb-6 tracking-tight">El Problema Oculto en tu PYME</h2>
+              <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-4 sm:mb-6 tracking-tight">El Problema Oculto en tu PYME</h2>
               <div className="flex items-center justify-center gap-2 text-slate-500 font-medium font-sans">
                 <Users size={18} className="text-blue-500" />
                 <span>Identificado en <strong className="text-slate-700">+8 empresas</strong> de Heredia y Alajuela</span>
@@ -324,12 +335,12 @@ const App = () => {
             </FadeInUp>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-8 mb-12 sm:mb-16">
             <FadeInUp delay={0.1}>
-              <div className="bg-slate-50 p-8 rounded-[2rem] border border-slate-200 shadow-sm relative overflow-hidden group hover:shadow-xl transition-all h-full flex flex-col">
-                <div className="flex items-start justify-between mb-6">
-                  <div className="w-14 h-14 bg-red-100/50 rounded-2xl flex items-center justify-center text-red-500 font-black text-2xl border border-red-200">
-                    <Clock size={28} />
+              <div className="bg-slate-50 p-5 sm:p-8 rounded-[2rem] border border-slate-200 shadow-sm relative overflow-hidden group hover:shadow-xl transition-all h-full flex flex-col">
+                <div className="flex items-start justify-between mb-5 sm:mb-6">
+                  <div className="w-11 h-11 sm:w-14 sm:h-14 bg-red-100/50 rounded-2xl flex items-center justify-center text-red-500 font-black text-2xl border border-red-200">
+                    <Clock size={22} />
                   </div>
                   <div className="text-right">
                     <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Impacto Oculto</div>
@@ -337,8 +348,8 @@ const App = () => {
                     <div className="text-xs text-red-400 font-medium">perdidos en ineficiencia</div>
                   </div>
                 </div>
-                <h3 className="font-bold text-xl text-slate-900 mb-4 tracking-tight">"Tus reportes llegan 3 días después de que ya no sirven"</h3>
-                <p className="text-slate-600 mb-8 font-medium text-sm flex-grow">El equipo invierte horas en exportar, limpiar y consolidar datos mientras las decisiones críticas se toman a ciegas o basadas en intuición, perdiendo ventas diarias.</p>
+                <h3 className="font-bold text-base sm:text-xl text-slate-900 mb-3 sm:mb-4 tracking-tight">"Tus reportes llegan 3 días después de que ya no sirven"</h3>
+                <p className="text-slate-600 mb-6 sm:mb-8 font-medium text-sm flex-grow">El equipo invierte horas en exportar, limpiar y consolidar datos mientras las decisiones críticas se toman a ciegas o basadas en intuición, perdiendo ventas diarias.</p>
                 
                 <div className="space-y-3 pt-6 border-t border-slate-200/60 mt-auto">
                   <div className="flex items-center gap-3 text-sm text-slate-600 font-medium">
@@ -358,10 +369,10 @@ const App = () => {
             </FadeInUp>
             
             <FadeInUp delay={0.2}>
-              <div className="bg-slate-50 p-8 rounded-[2rem] border border-slate-200 shadow-sm relative overflow-hidden group hover:shadow-[0_20px_40px_-15px_rgba(249,115,22,0.15)] transition-all h-full flex flex-col">
-                <div className="flex items-start justify-between mb-6">
-                  <div className="w-14 h-14 bg-orange-100/50 rounded-2xl flex items-center justify-center text-orange-500 font-black text-2xl border border-orange-200">
-                    <Database size={28} />
+              <div className="bg-slate-50 p-5 sm:p-8 rounded-[2rem] border border-slate-200 shadow-sm relative overflow-hidden group hover:shadow-[0_20px_40px_-15px_rgba(249,115,22,0.15)] transition-all h-full flex flex-col">
+                <div className="flex items-start justify-between mb-5 sm:mb-6">
+                  <div className="w-11 h-11 sm:w-14 sm:h-14 bg-orange-100/50 rounded-2xl flex items-center justify-center text-orange-500 font-black text-2xl border border-orange-200">
+                    <Database size={22} />
                   </div>
                   <div className="text-right">
                     <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Fuga de Capital</div>
@@ -369,8 +380,8 @@ const App = () => {
                     <div className="text-xs text-orange-400 font-medium">en horas-hombre al año</div>
                   </div>
                 </div>
-                <h3 className="font-bold text-xl text-slate-900 mb-4 tracking-tight">"Tu equipo dedica 40+ horas al mes a Excel"</h3>
-                <p className="text-slate-600 mb-8 font-medium text-sm flex-grow">Tu talento humano más caro está siendo desaprovechado en tareas robóticas de copiar y pegar, ahogando la innovación y exponiendo a la empresa a errores manuales costosos.</p>
+                <h3 className="font-bold text-base sm:text-xl text-slate-900 mb-3 sm:mb-4 tracking-tight">"Tu equipo dedica 40+ horas al mes a Excel"</h3>
+                <p className="text-slate-600 mb-6 sm:mb-8 font-medium text-sm flex-grow">Tu talento humano más caro está siendo desaprovechado en tareas robóticas de copiar y pegar, ahogando la innovación y exponiendo a la empresa a errores manuales costosos.</p>
                 
                 <div className="space-y-3 pt-6 border-t border-slate-200/60 mt-auto">
                   <div className="flex items-center gap-3 text-sm text-slate-600 font-medium">
@@ -390,10 +401,10 @@ const App = () => {
             </FadeInUp>
 
             <FadeInUp delay={0.3}>
-              <div className="bg-slate-50 p-8 rounded-[2rem] border border-slate-200 shadow-sm relative overflow-hidden group hover:shadow-[0_20px_40px_-15px_rgba(59,130,246,0.15)] transition-all h-full flex flex-col">
-                <div className="flex items-start justify-between mb-6">
-                  <div className="w-14 h-14 bg-blue-100/50 rounded-2xl flex items-center justify-center text-blue-500 font-black text-2xl border border-blue-200">
-                    <BarChart3 size={28} />
+              <div className="bg-slate-50 p-5 sm:p-8 rounded-[2rem] border border-slate-200 shadow-sm relative overflow-hidden group hover:shadow-[0_20px_40px_-15px_rgba(59,130,246,0.15)] transition-all h-full flex flex-col">
+                <div className="flex items-start justify-between mb-5 sm:mb-6">
+                  <div className="w-11 h-11 sm:w-14 sm:h-14 bg-blue-100/50 rounded-2xl flex items-center justify-center text-blue-500 font-black text-2xl border border-blue-200">
+                    <BarChart3 size={22} />
                   </div>
                   <div className="text-right">
                     <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Riesgo Financiero</div>
@@ -401,8 +412,8 @@ const App = () => {
                     <div className="text-xs text-blue-400 font-medium">capital estancado</div>
                   </div>
                 </div>
-                <h3 className="font-bold text-xl text-slate-900 mb-4 tracking-tight">"No sabes quién genera el 80% del margen"</h3>
-                <p className="text-slate-600 mb-8 font-medium text-sm flex-grow">Al no tener visibilidad de rentabilidad en tiempo real, tienes mercancía crítica estancada en bodegas y dejas que tus mayores riesgos de cartera pasen desapercibidos bajo el radar.</p>
+                <h3 className="font-bold text-base sm:text-xl text-slate-900 mb-3 sm:mb-4 tracking-tight">"No sabes quién genera el 80% del margen"</h3>
+                <p className="text-slate-600 mb-6 sm:mb-8 font-medium text-sm flex-grow">Al no tener visibilidad de rentabilidad en tiempo real, tienes mercancía crítica estancada en bodegas y dejas que tus mayores riesgos de cartera pasen desapercibidos bajo el radar.</p>
                 
                 <div className="space-y-3 pt-6 border-t border-slate-200/60 mt-auto">
                   <div className="flex items-center gap-3 text-sm text-slate-600 font-medium">
@@ -427,8 +438,8 @@ const App = () => {
             <div className="max-w-4xl mx-auto text-center bg-white rounded-[2rem] border border-slate-200 p-5 sm:p-8 md:p-12 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.05)] relative overflow-hidden">
                <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/5 rounded-full blur-[40px] pointer-events-none"></div>
                <div className="absolute bottom-0 left-0 w-32 h-32 bg-blue-500/5 rounded-full blur-[40px] pointer-events-none"></div>
-               
-               <h3 className="font-display text-2xl md:text-3xl font-bold text-slate-900 mb-4 relative z-10">
+
+               <h3 className="font-display text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 mb-4 relative z-10">
                  Si te identificaste con al menos uno, <span className="text-red-500">tu empresa está dejando dinero sobre la mesa.</span>
                </h3>
                <p className="font-sans text-slate-600 text-lg mb-8 max-w-2xl mx-auto relative z-10">
@@ -460,20 +471,20 @@ const App = () => {
         </div>
 
         {/* Social Proof Animated Ticker */}
-        <div className="mt-20 w-full bg-slate-900 py-6 overflow-hidden flex border-y border-slate-800">
-          <motion.div 
+        <div className="mt-12 sm:mt-20 w-full bg-slate-900 py-4 sm:py-6 overflow-hidden flex border-y border-slate-800">
+          <motion.div
             animate={{ x: ["0%", "-50%"] }}
             transition={{ ease: "linear", duration: 30, repeat: Infinity }}
             className="flex whitespace-nowrap min-w-max"
           >
             {[...Array(2)].map((_, i) => (
-              <div key={i} className="flex gap-16 items-center px-8">
-                <div className="flex items-center gap-3 text-white font-bold text-lg"><span className="text-emerald-400">99.4%</span> reducción en tiempo de auditoría</div>
-                <div className="w-2 h-2 rounded-full bg-slate-700"></div>
-                <div className="flex items-center gap-3 text-white font-bold text-lg"><span className="text-blue-400">174 SKUs</span> en 24 tiendas — visibilidad total</div>
-                <div className="w-2 h-2 rounded-full bg-slate-700"></div>
-                <div className="flex items-center gap-3 text-white font-bold text-lg"><span className="text-cyan-400">28 reportes manuales</span> eliminados por semana</div>
-                <div className="w-2 h-2 rounded-full bg-slate-700"></div>
+              <div key={i} className="flex gap-8 sm:gap-16 items-center px-4 sm:px-8">
+                <div className="flex items-center gap-2 sm:gap-3 text-white font-bold text-sm sm:text-base md:text-lg ticker-item"><span className="text-emerald-400">99.4%</span> reducción en tiempo de auditoría</div>
+                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-slate-700 shrink-0"></div>
+                <div className="flex items-center gap-2 sm:gap-3 text-white font-bold text-sm sm:text-base md:text-lg ticker-item"><span className="text-blue-400">174 SKUs</span> en 24 tiendas — visibilidad total</div>
+                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-slate-700 shrink-0"></div>
+                <div className="flex items-center gap-2 sm:gap-3 text-white font-bold text-sm sm:text-base md:text-lg ticker-item"><span className="text-cyan-400">28 reportes manuales</span> eliminados por semana</div>
+                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-slate-700 shrink-0"></div>
               </div>
             ))}
           </motion.div>
@@ -484,7 +495,7 @@ const App = () => {
       <HorizontalScrollSection />
 
       {/* ROI & Calculator */}
-      <section id="roi" className="py-24 bg-slate-950 text-white relative overflow-hidden z-20">
+      <section id="roi" className="py-14 sm:py-20 md:py-24 bg-slate-950 text-white relative overflow-hidden z-20">
         {/* Decorative background grids */}
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.05] mix-blend-overlay"></div>
         <div className="absolute top-0 right-0 w-[340px] h-[340px] sm:w-[520px] sm:h-[520px] lg:w-[800px] lg:h-[800px] bg-emerald-500/10 rounded-full blur-[100px] sm:blur-[120px] pointer-events-none" />
@@ -495,11 +506,11 @@ const App = () => {
               <div className="inline-flex items-center gap-2 px-6 py-2 bg-white/5 border border-white/10 rounded-full text-sm font-bold mb-6 backdrop-blur-md text-emerald-300">
                 <Calculator size={16} /> Evaluación Transparete
               </div>
-              <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-6 tracking-tight">
-                Antes de contratarnos, <br className="hidden md:block"/>
+              <h2 className="font-display text-[1.75rem] sm:text-4xl md:text-5xl lg:text-6xl font-black mb-5 sm:mb-6 tracking-tight">
+                Antes de contratarnos, <br className="hidden sm:block"/>
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">calculá si te conviene.</span>
               </h2>
-              <p className="font-sans text-lg sm:text-xl text-slate-300 max-w-3xl mx-auto font-light leading-relaxed">
+              <p className="font-sans text-base sm:text-lg md:text-xl text-slate-300 max-w-3xl mx-auto font-light leading-relaxed">
                 La mayoría de empresas en Costa Rica pierde entre ₡400,000 y ₡2,000,000 al mes en procesos que se podrían automatizar. En 2 minutos sabés si ese es tu caso.
               </p>
             </FadeInUp>
@@ -598,23 +609,23 @@ const App = () => {
             {/* Results Output */}
             <div className="lg:w-1/2 w-full">
               <FadeInUp delay={0.3}>
-                <div className="grid grid-cols-2 gap-4 mb-8">
-                  <div className="glass-card-dark border-l-4 border-l-red-500 p-6 rounded-xl border border-slate-800/50">
-                    <div className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Costo Mensual Actual</div>
-                    <div className="font-display text-2xl md:text-3xl font-black text-white">₡{new Intl.NumberFormat('es-CR').format(currentMonthlyCost)}</div>
+                <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-6 sm:mb-8">
+                  <div className="glass-card-dark border-l-4 border-l-red-500 p-3 sm:p-5 md:p-6 rounded-xl border border-slate-800/50">
+                    <div className="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-widest mb-1.5 sm:mb-2">Costo Mensual Actual</div>
+                    <div className="font-display text-base sm:text-xl md:text-2xl lg:text-3xl font-black text-white leading-tight">₡{new Intl.NumberFormat('es-CR').format(currentMonthlyCost)}</div>
                   </div>
-                  <div className="glass-card-dark border-l-4 border-l-emerald-500 p-6 rounded-xl border border-slate-800/50">
-                    <div className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Horas Recuperables</div>
-                    <div className="font-display text-2xl md:text-3xl font-black text-white">{Math.round(calcPeople * calcHours * calcFreq * 0.9)}</div>
+                  <div className="glass-card-dark border-l-4 border-l-emerald-500 p-3 sm:p-5 md:p-6 rounded-xl border border-slate-800/50">
+                    <div className="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-widest mb-1.5 sm:mb-2">Horas Recuperables</div>
+                    <div className="font-display text-base sm:text-xl md:text-2xl lg:text-3xl font-black text-white leading-tight">{Math.round(calcPeople * calcHours * calcFreq * 0.9)}<span className="text-xs sm:text-sm text-slate-400 font-normal ml-1">h/mes</span></div>
                   </div>
-                  <div className="glass-card-dark border-l-4 border-l-cyan-500 p-6 rounded-xl border border-slate-800/50">
-                    <div className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Payback Estimado</div>
-                    <div className="font-display text-2xl md:text-3xl font-black text-white">{((1500000) / (currentMonthlyCost * 0.9 || 1)).toFixed(1)} <span className="text-sm text-slate-400 font-normal">meses</span></div>
+                  <div className="glass-card-dark border-l-4 border-l-cyan-500 p-3 sm:p-5 md:p-6 rounded-xl border border-slate-800/50">
+                    <div className="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-widest mb-1.5 sm:mb-2">Payback Estimado</div>
+                    <div className="font-display text-base sm:text-xl md:text-2xl lg:text-3xl font-black text-white leading-tight">{((1500000) / (currentMonthlyCost * 0.9 || 1)).toFixed(1)} <span className="text-xs sm:text-sm text-slate-400 font-normal">meses</span></div>
                   </div>
-                  <div className="glass-card-dark border-l-4 border-l-emerald-400 p-6 rounded-xl border border-slate-800/50 relative overflow-hidden">
+                  <div className="glass-card-dark border-l-4 border-l-emerald-400 p-3 sm:p-5 md:p-6 rounded-xl border border-slate-800/50 relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-16 h-16 bg-emerald-500/20 rounded-full blur-xl"></div>
-                    <div className="text-xs font-bold text-emerald-400 uppercase tracking-widest mb-2">Ahorro Año 1</div>
-                    <div className="font-display text-2xl md:text-3xl font-black text-emerald-400">₡{new Intl.NumberFormat('es-CR').format(Math.round(currentYearlyCost * 0.9))}</div>
+                    <div className="text-[10px] sm:text-xs font-bold text-emerald-400 uppercase tracking-widest mb-1.5 sm:mb-2">Ahorro Año 1</div>
+                    <div className="font-display text-base sm:text-xl md:text-2xl lg:text-3xl font-black text-emerald-400 leading-tight">₡{new Intl.NumberFormat('es-CR').format(Math.round(currentYearlyCost * 0.9))}</div>
                   </div>
                 </div>
               </FadeInUp>
@@ -661,20 +672,20 @@ const App = () => {
       </section>
 
       {/* Casos de Uso Reales / Portfolio */}
-      <section id="portfolio" className="py-24 bg-slate-50 relative overflow-hidden border-t border-slate-200 z-10">
+      <section id="portfolio" className="py-14 sm:py-20 md:py-24 bg-slate-50 relative overflow-hidden border-t border-slate-200 z-10">
         <div className="absolute top-0 left-0 w-full h-[320px] sm:h-[420px] lg:h-[500px] bg-gradient-to-b from-slate-100 to-transparent pointer-events-none" />
         <div className="max-w-7xl mx-auto px-4 relative z-10">
           <div className="text-center mb-16">
             <FadeInUp>
-              <h2 className="font-display text-4xl md:text-5xl font-bold text-slate-900 mb-6 tracking-tight">
+              <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-5 sm:mb-6 tracking-tight">
                 Los números de arriba son reales. <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-cyan-500">Ya lo hemos hecho.</span>
               </h2>
             </FadeInUp>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-8 mb-12 sm:mb-16">
             <FadeInUp delay={0.1}>
-              <motion.div whileHover={{ y: -5 }} className="bg-white p-8 rounded-[2rem] border border-slate-200 shadow-sm hover:shadow-2xl transition-all h-full flex flex-col relative group">
+              <motion.div whileHover={{ y: -5 }} className="bg-white p-5 sm:p-8 rounded-[2rem] border border-slate-200 shadow-sm hover:shadow-2xl transition-all h-full flex flex-col relative group">
                 <div className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Empresa de distribución (Heredia)</div>
                 <h3 className="font-display text-xl font-medium text-slate-900 mb-6 leading-relaxed italic text-balance">
                   "Tenían 2 personas dedicando 12 horas semanales a consolidar datos de ventas desde 3 sistemas distintos."
@@ -690,7 +701,7 @@ const App = () => {
             </FadeInUp>
 
             <FadeInUp delay={0.2}>
-              <motion.div whileHover={{ y: -5 }} className="bg-white p-8 rounded-[2rem] border border-slate-200 shadow-sm hover:shadow-2xl transition-all h-full flex flex-col relative group">
+              <motion.div whileHover={{ y: -5 }} className="bg-white p-5 sm:p-8 rounded-[2rem] border border-slate-200 shadow-sm hover:shadow-2xl transition-all h-full flex flex-col relative group">
                 <div className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Empresa de Servicios Financieros</div>
                 <h3 className="font-display text-xl font-medium text-slate-900 mb-6 leading-relaxed italic text-balance">
                   "El cierre mensual de reconciliación tomaba 3 horas y generaba errores frecuentes."
@@ -706,7 +717,7 @@ const App = () => {
             </FadeInUp>
 
             <FadeInUp delay={0.3}>
-              <motion.div whileHover={{ y: -5 }} className="bg-white p-8 rounded-[2rem] border border-slate-200 shadow-sm hover:shadow-2xl transition-all h-full flex flex-col relative group">
+              <motion.div whileHover={{ y: -5 }} className="bg-white p-5 sm:p-8 rounded-[2rem] border border-slate-200 shadow-sm hover:shadow-2xl transition-all h-full flex flex-col relative group">
                 <div className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Retail Multilocal</div>
                 <h3 className="font-display text-xl font-medium text-slate-900 mb-6 leading-relaxed italic text-balance">
                   "El equipo no sabía cuáles SKUs generaban pérdida hasta que ya era demasiado tarde."
@@ -742,7 +753,7 @@ const App = () => {
       </section>
 
       {/* Methodology Visualizer - Recharts AreaChart */}
-      <section className="py-32 bg-white relative overflow-hidden">
+      <section className="py-16 sm:py-24 md:py-32 bg-white relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 relative z-10">
           <div className="flex flex-col lg:flex-row gap-16 items-center">
             <div className="lg:w-1/2">
@@ -750,7 +761,7 @@ const App = () => {
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-full text-sm font-bold mb-6 border border-blue-100">
                   <BarChart3 size={16} /> Inteligencia de Negocio
                 </div>
-                <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-slate-900 leading-tight tracking-normal">Analítica Predictiva en <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">Tiempo Real</span></h2>
+                <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-5 sm:mb-6 text-slate-900 leading-tight tracking-normal">Analítica Predictiva en <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">Tiempo Real</span></h2>
                 <p className="font-sans text-lg text-slate-600 mb-10 leading-relaxed font-medium">
                   Visualiza el futuro de tu demanda hoy. Nuestro forecast con 93.2% de precisión te permite planificar turnos, optimizar el occupancy y reducir horas extra drásticamente.
                 </p>
@@ -802,23 +813,23 @@ const App = () => {
               </FadeInUp>
             </div>
 
-            <div className="lg:w-1/2 grid grid-cols-1 sm:grid-cols-2 gap-6 pt-10 lg:pt-0">
+            <div className="lg:w-1/2 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 pt-8 lg:pt-0">
               {[
-                { title: "Dashboard Ejecutivo", desc: "Visibilidad total en 30 días garantizada y en tu móvil.", icon: <BarChart3 className="text-blue-500" size={32} /> },
-                { title: "Alertas SLA", desc: "Notificaciones proactivas directas en tus canales de Teams.", icon: <Zap className="text-yellow-500" size={32} /> },
-                { title: "Staffing Óptimo", desc: "Simulación de escenarios What-If para ajustar turnos.", icon: <Users className="text-purple-500" size={32} /> },
-                { title: "Transferencia COE", desc: "Tu equipo aprende a dominar el modelo de datos sin nosotros.", icon: <Cpu className="text-emerald-500" size={32} /> }
+                { title: "Dashboard Ejecutivo", desc: "Visibilidad total en 30 días garantizada y en tu móvil.", icon: <BarChart3 className="text-blue-500" size={28} /> },
+                { title: "Alertas SLA", desc: "Notificaciones proactivas directas en tus canales de Teams.", icon: <Zap className="text-yellow-500" size={28} /> },
+                { title: "Staffing Óptimo", desc: "Simulación de escenarios What-If para ajustar turnos.", icon: <Users className="text-purple-500" size={28} /> },
+                { title: "Transferencia COE", desc: "Tu equipo aprende a dominar el modelo de datos sin nosotros.", icon: <Cpu className="text-emerald-500" size={28} /> }
               ].map((item, idx) => (
                 <FadeInUp key={idx} delay={0.2 + (idx * 0.1)}>
-                  <motion.div 
+                  <motion.div
                     whileHover={{ scale: 1.03, y: -5 }}
-                    className="bg-slate-50 p-8 rounded-[2rem] border border-slate-200 shadow-sm hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] transition-all h-full"
+                    className="bg-slate-50 p-5 sm:p-7 rounded-[2rem] border border-slate-200 shadow-sm hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] transition-all h-full"
                   >
-                    <div className="mb-6 w-16 h-16 bg-white rounded-2xl border border-slate-200 flex items-center justify-center shadow-sm">
+                    <div className="mb-4 sm:mb-5 w-12 h-12 sm:w-14 sm:h-14 bg-white rounded-2xl border border-slate-200 flex items-center justify-center shadow-sm">
                       {item.icon}
                     </div>
-                    <h4 className="font-display font-bold text-xl text-slate-900 mb-3">{item.title}</h4>
-                    <p className="font-sans text-slate-600 font-medium leading-relaxed">{item.desc}</p>
+                    <h4 className="font-display font-bold text-base sm:text-lg md:text-xl text-slate-900 mb-2 sm:mb-3">{item.title}</h4>
+                    <p className="font-sans text-slate-600 font-medium leading-relaxed text-sm sm:text-base">{item.desc}</p>
                   </motion.div>
                 </FadeInUp>
               ))}
@@ -828,15 +839,15 @@ const App = () => {
       </section>
 
       {/* Metodología 4D */}
-      <section className="py-24 bg-white relative border-t border-slate-200 z-20">
+      <section className="py-14 sm:py-20 md:py-24 bg-white relative border-t border-slate-200 z-20">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-16">
             <FadeInUp>
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-full text-sm font-bold mb-6 border border-blue-100">
                 <Layers size={16} /> Metodología 4D
               </div>
-              <h2 className="font-display text-3xl md:text-5xl font-bold mb-6 text-slate-900 tracking-normal">Nuestro Framework Propietario.</h2>
-              <p className="font-sans text-xl text-slate-600 max-w-3xl mx-auto mb-6">
+              <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 text-slate-900 tracking-normal">Nuestro Framework Propietario.</h2>
+              <p className="font-sans text-base sm:text-lg md:text-xl text-slate-600 max-w-3xl mx-auto mb-5 sm:mb-6">
                 No improvisamos. Aplicamos 4 fases estrictas con entregables medibles en cada etapa — porque el cliente no debería pagar por experimentos.
               </p>
               <p className="text-base text-slate-400 max-w-2xl mx-auto font-medium italic">
@@ -874,7 +885,7 @@ const App = () => {
                       <div className={`text-xs font-bold uppercase tracking-widest ${
                         activePhase === idx ? 'text-blue-200' : 'text-slate-400'
                       }`}>{phase.id}</div>
-                      <div className="font-display font-bold text-lg">{phase.title}</div>
+                      <div className="font-display font-bold text-base sm:text-lg">{phase.title}</div>
                       <div className={`text-xs hidden md:block ${
                         activePhase === idx ? 'text-blue-200' : 'text-slate-400'
                       }`}>{phase.tagline}</div>
@@ -930,9 +941,9 @@ const App = () => {
                       </div>
 
                       {/* Text column */}
-                      <div className="p-8 md:p-10">
-                        <p className="text-lg text-slate-700 leading-relaxed font-medium mb-6">{content.summary}</p>
-                        <p className="text-sm text-slate-500 leading-relaxed mb-8">{content.detail}</p>
+                      <div className="p-5 sm:p-7 md:p-10">
+                        <p className="text-base sm:text-lg text-slate-700 leading-relaxed font-medium mb-4 sm:mb-6">{content.summary}</p>
+                        <p className="text-sm text-slate-500 leading-relaxed mb-6 sm:mb-8">{content.detail}</p>
 
                         <div className="mb-6">
                           <div className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">Entregables de esta fase</div>
@@ -958,36 +969,38 @@ const App = () => {
 
           {/* Comparativa Visual */}
           <FadeInUp delay={0.3}>
-            <div className="overflow-hidden rounded-3xl border border-slate-200 shadow-xl bg-white mb-12">
-              <div className="grid grid-cols-3 bg-slate-900 text-white p-6 font-bold text-sm md:text-base">
-                <div className="text-slate-400">Característica</div>
-                <div className="text-center text-slate-400">Consultor genérico</div>
-                <div className="text-center text-emerald-400 font-black text-lg">JC Analytics 4D</div>
-              </div>
-              {[
-                { label: "Primer contacto", generic: "Propuesta comercial", jc: "Diagnóstico gratuito" },
-                { label: "Datos de trabajo", generic: "Datasets de demo", jc: "Tus datos reales" },
-                { label: "Visibilidad", generic: "Entrega al final", jc: "Avances cada 72h" },
-                { label: "Forma de pago", generic: "Proyecto completo por adelantado", jc: "Por fase aprobada" },
-                { label: "Al terminar", generic: "Dependés de ellos para cambios", jc: "Tu equipo lo opera solo" },
-                { label: "Si no funciona", generic: "\"Estaba fuera del alcance\"", jc: "Lo arreglamos — está en el contrato" }
-              ].map((row, idx, arr) => (
-                <div key={idx} className={`grid grid-cols-3 p-5 items-center text-sm md:text-base ${idx !== arr.length - 1 ? 'border-b border-slate-100' : ''}`}>
-                  <div className="font-bold text-slate-800">{row.label}</div>
-                  <div className="text-center text-slate-500 px-2">{row.generic}</div>
-                  <div className="text-center font-bold text-emerald-600 bg-emerald-50 py-2 rounded-lg px-2">{row.jc}</div>
+            <div className="table-scroll-wrap shadow-xl border border-slate-200 mb-10 sm:mb-12">
+              <div className="min-w-[520px]">
+                <div className="grid grid-cols-3 bg-slate-900 text-white px-4 py-4 sm:p-6 font-bold text-xs sm:text-sm md:text-base rounded-t-3xl">
+                  <div className="text-slate-400">Característica</div>
+                  <div className="text-center text-slate-400">Consultor genérico</div>
+                  <div className="text-center text-emerald-400 font-black text-sm sm:text-base md:text-lg">JC Analytics 4D</div>
                 </div>
-              ))}
+                {[
+                  { label: "Primer contacto", generic: "Propuesta comercial", jc: "Diagnóstico gratuito" },
+                  { label: "Datos de trabajo", generic: "Datasets de demo", jc: "Tus datos reales" },
+                  { label: "Visibilidad", generic: "Entrega al final", jc: "Avances cada 72h" },
+                  { label: "Forma de pago", generic: "Proyecto completo por adelantado", jc: "Por fase aprobada" },
+                  { label: "Al terminar", generic: "Dependés de ellos para cambios", jc: "Tu equipo lo opera solo" },
+                  { label: "Si no funciona", generic: "\"Estaba fuera del alcance\"", jc: "Lo arreglamos — está en el contrato" }
+                ].map((row, idx, arr) => (
+                  <div key={idx} className={`grid grid-cols-3 px-4 py-3 sm:p-5 items-center text-xs sm:text-sm md:text-base bg-white ${idx !== arr.length - 1 ? 'border-b border-slate-100' : 'rounded-b-3xl'}`}>
+                    <div className="font-bold text-slate-800">{row.label}</div>
+                    <div className="text-center text-slate-500 px-1 sm:px-2">{row.generic}</div>
+                    <div className="text-center font-bold text-emerald-600 bg-emerald-50 py-1.5 sm:py-2 rounded-lg px-1 sm:px-2">{row.jc}</div>
+                  </div>
+                ))}
+              </div>
             </div>
           </FadeInUp>
 
           {/* CTA al final de la sección */}
           <FadeInUp delay={0.4}>
-            <div className="bg-slate-950 rounded-[2rem] p-10 text-center text-white relative overflow-hidden">
+            <div className="bg-slate-950 rounded-[2rem] p-6 sm:p-10 text-center text-white relative overflow-hidden">
               <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/20 rounded-full blur-[80px] pointer-events-none"></div>
               <div className="absolute bottom-0 left-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-[80px] pointer-events-none"></div>
               <div className="relative z-10">
-                <p className="text-xl md:text-2xl font-medium text-slate-300 mb-6 max-w-2xl mx-auto">
+                <p className="text-base sm:text-xl md:text-2xl font-medium text-slate-300 mb-5 sm:mb-6 max-w-2xl mx-auto">
                   El D1 no cuesta nada. Si después de esa sesión no ves valor claro, no hay compromiso de continuar.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
@@ -1016,7 +1029,7 @@ const App = () => {
       </section>
 
       {/* Equipo / Sobre Nosotros */}
-      <section className="py-32 bg-slate-950 relative z-20 overflow-hidden">
+      <section className="py-16 sm:py-24 md:py-32 bg-slate-950 relative z-20 overflow-hidden">
         {/* Ambient Glow Effects */}
         <div className="absolute top-0 right-1/4 w-[220px] h-[220px] sm:w-[300px] sm:h-[300px] lg:w-[400px] lg:h-[400px] bg-blue-600/10 rounded-full blur-[90px] sm:blur-[120px] pointer-events-none mix-blend-screen" />
         <div className="absolute bottom-0 left-1/4 w-[260px] h-[260px] sm:w-[360px] sm:h-[360px] lg:w-[500px] lg:h-[500px] bg-cyan-500/10 rounded-full blur-[100px] sm:blur-[150px] pointer-events-none mix-blend-screen" />
@@ -1036,7 +1049,7 @@ const App = () => {
             </FadeInUp>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 mb-20">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-8 lg:gap-12 mb-12 sm:mb-20">
             {[
               {
                 fullName: "Catalina González Araya",
@@ -1059,17 +1072,17 @@ const App = () => {
             ].map((member, idx) => (
               <FadeInUp key={idx} delay={0.15 * idx} className="h-full">
                 <TiltCard className="h-full block">
-                  <motion.div 
-                    className="glass-card-dark p-8 lg:p-10 rounded-[2.5rem] border border-slate-700/50 flex flex-col h-full items-center text-center shadow-2xl bg-slate-800/40 relative overflow-hidden group transition-all duration-500 hover:bg-slate-800/60 hover:shadow-[0_20px_60px_-15px_rgba(59,130,246,0.2)] hover:border-blue-500/30"
+                  <motion.div
+                    className="glass-card-dark p-5 sm:p-7 lg:p-10 rounded-[2.5rem] border border-slate-700/50 flex flex-col h-full items-center text-center shadow-2xl bg-slate-800/40 relative overflow-hidden group transition-all duration-500 hover:bg-slate-800/60 hover:shadow-[0_20px_60px_-15px_rgba(59,130,246,0.2)] hover:border-blue-500/30"
                   >
                     {/* Hover Glow Background */}
                     <div className="absolute -inset-24 bg-gradient-to-br from-blue-500/10 via-cyan-400/5 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-700 pointer-events-none blur-2xl transform group-hover:translate-y-8"></div>
                     
                     {/* Interactive Avatar Container */}
-                    <div className="relative mb-10 group/avatar">
+                    <div className="relative mb-6 sm:mb-8 lg:mb-10 group/avatar">
                       <div className="absolute inset-[-10px] bg-gradient-to-tr from-blue-500 to-cyan-400 rounded-full blur-xl opacity-20 group-hover:opacity-70 transition-opacity duration-700"></div>
                       <div className="absolute inset-[-3px] bg-gradient-to-b from-slate-700 to-slate-800 rounded-full z-10 transition-transform duration-500 group-hover:scale-105"></div>
-                      <div className="w-44 h-44 rounded-full overflow-hidden relative z-20 bg-slate-900 border-2 border-slate-600/50 group-hover:border-blue-400/50 transition-all duration-500 transform group-hover:scale-105 shadow-inner">
+                      <div className="w-32 h-32 sm:w-40 sm:h-40 lg:w-44 lg:h-44 rounded-full overflow-hidden relative z-20 bg-slate-900 border-2 border-slate-600/50 group-hover:border-blue-400/50 transition-all duration-500 transform group-hover:scale-105 shadow-inner">
                         <img 
                           src={member.image} 
                           alt={member.fullName} 
@@ -1079,9 +1092,9 @@ const App = () => {
                       </div>
                     </div>
 
-                    <h3 className="font-display text-2xl lg:text-3xl font-bold text-white mb-3 relative z-10 transition-colors duration-300 group-hover:text-blue-100">{member.fullName}</h3>
-                    
-                    <div className="inline-flex items-center justify-center px-4 py-2 bg-slate-900/60 rounded-full border border-slate-700/50 mb-8 relative z-10 transition-colors duration-300 group-hover:border-blue-500/30">
+                    <h3 className="font-display text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-2 sm:mb-3 relative z-10 transition-colors duration-300 group-hover:text-blue-100">{member.fullName}</h3>
+
+                    <div className="inline-flex items-center justify-center px-3 sm:px-4 py-1.5 sm:py-2 bg-slate-900/60 rounded-full border border-slate-700/50 mb-5 sm:mb-7 lg:mb-8 relative z-10 transition-colors duration-300 group-hover:border-blue-500/30">
                       <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300 font-sans text-xs sm:text-sm font-bold uppercase tracking-widest text-center leading-tight drop-shadow-md">{member.role}</span>
                     </div>
                     
@@ -1096,7 +1109,7 @@ const App = () => {
           </div>
 
           <FadeInUp delay={0.4}>
-            <div className="w-full bg-slate-900 border border-slate-800 rounded-3xl p-8 relative overflow-hidden flex items-center justify-center">
+            <div className="w-full bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-8 relative overflow-hidden flex items-center justify-center">
               {/* Timeline graphic visually replacing standard text */}
               <div className="relative w-full max-w-4xl py-12">
                 <div className="absolute top-1/2 left-0 w-full h-px bg-slate-800 -translate-y-1/2"></div>
@@ -1127,7 +1140,7 @@ const App = () => {
       </section>
 
       {/* CTA Final y Contacto */}
-      <section className="relative py-24 text-center overflow-hidden bg-slate-950 border-t-4 border-blue-600">
+      <section className="relative py-14 sm:py-20 md:py-24 text-center overflow-hidden bg-slate-950 border-t-4 border-blue-600">
         <div className="max-w-7xl mx-auto px-4 relative z-10">
           <div className="flex flex-col lg:flex-row gap-16 items-center">
             
@@ -1136,10 +1149,10 @@ const App = () => {
                 <div className="inline-flex items-center gap-2 px-6 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-bold mb-6 shadow-sm text-cyan-400">
                   <Target size={16} /> El Próximo Paso
                 </div>
-                <h2 className="font-display text-4xl md:text-5xl font-bold text-white mb-6">
+                <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6">
                   Validamos tu caso de forma <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">gratuita</span>.
                 </h2>
-                <p className="font-sans text-xl text-slate-400 mb-8 max-w-xl">
+                <p className="font-sans text-base sm:text-lg md:text-xl text-slate-400 mb-6 sm:mb-8 max-w-xl">
                   En la sesión de Discovery de 30 min, evaluaremos si podemos ayudarte. Si no hay ROI claro, te lo decimos sin compromisos.
                 </p>
                 <div className="space-y-4 mb-8">
@@ -1156,8 +1169,8 @@ const App = () => {
             {/* Assessment Embed/Form Box container */}
             <div className="lg:w-1/2 w-full">
               <FadeInUp delay={0.2}>
-                <div className="glass-card-dark rounded-3xl p-8 border border-slate-700 shadow-2xl text-left">
-                  <h3 className="text-2xl font-bold text-white mb-6 font-display">Solicitar Assessment (Fase 0)</h3>
+                <div className="glass-card-dark rounded-3xl p-5 sm:p-8 border border-slate-700 shadow-2xl text-left">
+                  <h3 className="text-xl sm:text-2xl font-bold text-white mb-5 sm:mb-6 font-display">Solicitar Assessment (Fase 0)</h3>
                   <form className="flex flex-col gap-4">
                     <div className="flex flex-col gap-2">
                        <label className="text-sm font-bold text-slate-400">Nombre & Empresa</label>
@@ -1187,32 +1200,34 @@ const App = () => {
       </section>
 
       {/* Footer Minimalista Premium */}
-      <footer className="py-12 border-t border-slate-800 text-slate-400" style={{ backgroundColor: '#020617' }}>
-        <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
+      <footer className="py-8 sm:py-12 border-t border-slate-800 text-slate-400" style={{ backgroundColor: '#020617' }}>
+        <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4 sm:gap-6">
           <div className="flex items-center gap-3">
-            <img src={import.meta.env.BASE_URL + "Logo.png"} alt="JC Analytics Logo" className="h-10 w-auto object-contain" />
+            <img src={import.meta.env.BASE_URL + "Logo.png"} alt="JC Analytics Logo" className="h-8 sm:h-10 w-auto object-contain" />
           </div>
-          <div className="text-sm font-medium font-sans">
+          <div className="text-xs sm:text-sm font-medium font-sans text-center">
             © 2026 JC Analytics. Propuesta Privada.
           </div>
-          <div className="flex gap-8 font-sans items-center">
-            <a href="mailto:jcanalyticscr@gmail.com" className="hover:text-cyan-400 transition-colors text-sm font-bold">jcanalyticscr@gmail.com</a>
-            <a href="https://wa.me/50670330596" target="_blank" rel="noreferrer" className="hover:text-emerald-400 transition-colors text-sm font-bold text-emerald-500">Contacto WhatsApp</a>
-            <button className="hover:text-cyan-400 transition-colors text-sm font-bold">LinkedIn</button>
+          <div className="flex flex-wrap justify-center gap-4 sm:gap-8 font-sans items-center">
+            <a href="mailto:jcanalyticscr@gmail.com" className="hover:text-cyan-400 transition-colors text-xs sm:text-sm font-bold">jcanalyticscr@gmail.com</a>
+            <a href="https://wa.me/50670330596" target="_blank" rel="noreferrer" className="hover:text-emerald-400 transition-colors text-xs sm:text-sm font-bold text-emerald-500">Contacto WhatsApp</a>
+            <button className="hover:text-cyan-400 transition-colors text-xs sm:text-sm font-bold">LinkedIn</button>
           </div>
         </div>
       </footer>
 
-      {/* Floating WhatsApp Button */}
-      <motion.a 
+      {/* Floating WhatsApp Button with Pulse */}
+      <motion.a
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
-        href="https://wa.me/50670330596" 
-        target="_blank" 
+        href="https://wa.me/50670330596"
+        target="_blank"
         rel="noreferrer"
-        className="fixed bottom-6 right-6 z-50 bg-emerald-500 hover:bg-emerald-400 text-white p-4 rounded-full shadow-2xl flex items-center justify-center border-4 border-emerald-500/30"
+        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 bg-emerald-500 hover:bg-emerald-400 text-white p-3 sm:p-4 rounded-full shadow-2xl flex items-center justify-center pulse-ring"
+        aria-label="Contactar por WhatsApp"
       >
-        <MessageSquare size={32} />
+        <MessageSquare size={26} className="sm:hidden" />
+        <MessageSquare size={30} className="hidden sm:block" />
       </motion.a>
     </div>
   );

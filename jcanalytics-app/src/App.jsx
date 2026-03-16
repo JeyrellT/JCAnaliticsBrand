@@ -157,7 +157,7 @@ const App = () => {
           <div className="flex items-center gap-3 group cursor-pointer">
             <motion.img
               whileHover={{ scale: 1.05 }}
-              src="/Logo.png"
+              src={import.meta.env.BASE_URL + "Logo.png"}
               alt="JC Analytics Logo"
               className="h-12 w-auto object-contain"
             />
@@ -1001,19 +1001,19 @@ const App = () => {
                 fullName: "Catalina González Araya",
                 role: "Operaciones & CX",
                 description: "Especialista en operaciones y mejora continua de procesos financieros. Experiencia en optimización de KPIs en multinacionales del sector BPO y retail. Dirige el área de implementación asegurando adopción total.",
-                image: "/Kathalina Gonzales.png"
+                image: import.meta.env.BASE_URL + "Kathalina Gonzales.png"
               },
               {
                 fullName: "Jeyrell Tardencilla",
                 role: "Data & Automation Lead",
                 description: "Senior Engineer con 8+ años de experiencia corporativa en corporaciones de consumo masivo. Lean Six Sigma Green Belt. Especializado en arquitecturas de datos, Python y Power BI, transformando equipos ahogados en reportes en áreas de alto rendimiento.",
-                image: "/Jeyrell Tardencilla.png"
+                image: import.meta.env.BASE_URL + "Jeyrell Tardencilla.png"
               },
               {
                 fullName: "Alex Benedict",
                 role: "Implementación Técnica",
                 description: "Desarrollador enfocado en estructuración de datos y pipelines analíticos. Garantiza el soporte técnico riguroso de cada solución entregada, aportando solidez en la automatización confiable de procesos manuales.",
-                image: "/Alex Benect.png"
+                image: import.meta.env.BASE_URL + "Alex Benect.png"
               }
             ].map((member, idx) => (
               <FadeInUp key={idx} delay={0.15 * idx} className="h-full">
@@ -1149,7 +1149,7 @@ const App = () => {
       <footer className="py-12 border-t border-slate-800 text-slate-400" style={{ backgroundColor: '#020617' }}>
         <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-3">
-            <img src="/Logo.png" alt="JC Analytics Logo" className="h-10 w-auto object-contain" />
+            <img src={import.meta.env.BASE_URL + "Logo.png"} alt="JC Analytics Logo" className="h-10 w-auto object-contain" />
           </div>
           <div className="text-sm font-medium font-sans">
             © 2026 JC Analytics. Propuesta Privada.

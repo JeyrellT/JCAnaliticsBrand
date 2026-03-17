@@ -168,6 +168,13 @@ const App = () => {
 
   const currentMonthlyCost = Math.round((calcPeople * calcHours * calcFreq * calcErrors) * (calcSalary / 160));
   const currentYearlyCost = currentMonthlyCost * 12;
+  const monthlyHoursSpent = calcPeople * calcHours * calcFreq;
+  const halfTimeSalaryCost = Math.round(calcSalary * 0.5);
+  const netflixMonthlyReference = 12000;
+  const netflixMonthsEquivalent = Math.max(1, Math.round(currentMonthlyCost / netflixMonthlyReference));
+  const netflixEquivalentLabel = netflixMonthsEquivalent >= 12
+    ? `${(netflixMonthsEquivalent / 12).toFixed(1)} años`
+    : `${netflixMonthsEquivalent} meses`;
   const chartMargins = isMobileViewport ? { top: 8, right: 0, left: -24, bottom: 0 } : { top: 10, right: 10, left: -20, bottom: 0 };
 
   return (
@@ -647,7 +654,8 @@ const App = () => {
                    <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mb-6 shadow-inner border border-blue-500/20">
                      <Users size={28} className="text-blue-400" />
                    </div>
-                   <p className="text-lg font-medium text-slate-300">Contratar medio tiempo a alguien solo para eso</p>
+                   <p className="text-lg font-medium text-slate-300">Cubrir {monthlyHoursSpent} horas/mes en trabajo manual (casi medio tiempo)</p>
+                   <p className="text-sm text-slate-500 mt-2">Eso equivale a ~₡{new Intl.NumberFormat('es-CR').format(halfTimeSalaryCost)} mensuales.</p>
                  </div>
                </FadeInUp>
                <FadeInUp delay={0.2}>
@@ -655,7 +663,8 @@ const App = () => {
                    <div className="w-16 h-16 bg-orange-500/10 rounded-full flex items-center justify-center mb-6 shadow-inner border border-orange-500/20">
                      <MonitorSmartphone size={28} className="text-orange-400" />
                    </div>
-                   <p className="text-lg font-medium text-slate-300">Pagar 2 años de Netflix empresarial sin ver nada útil</p>
+                   <p className="text-lg font-medium text-slate-300">Pagar <strong className="text-orange-300">{netflixEquivalentLabel}</strong> de Netflix empresarial sin ver nada util</p>
+                   <p className="text-sm text-slate-500 mt-2">Calculado con {calcHours}h por proceso y frecuencia actual.</p>
                  </div>
                </FadeInUp>
                <FadeInUp delay={0.3}>

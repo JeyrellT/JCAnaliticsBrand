@@ -172,8 +172,8 @@ const App = () => {
   const monthlyTotalHours = monthlyProcessHours * calcErrors;
   const recoverableHours = Math.round(monthlyTotalHours * 0.9);
   const recoverableCostEquivalent = Math.round(recoverableHours * hourlyCost);
-  const halfTimeHoursPerMonth = 80;
-  const halfTimePeopleEquivalent = (recoverableHours / halfTimeHoursPerMonth).toFixed(1);
+  const fullTimeHoursPerMonth = 160;
+  const fullTimePeopleEquivalent = (recoverableHours / fullTimeHoursPerMonth).toFixed(1);
   const currentMonthlyCost = Math.round(monthlyTotalHours * hourlyCost);
   const currentYearlyCost = currentMonthlyCost * 12;
   const netflixMonthlyReference = 12000;
@@ -661,7 +661,7 @@ const App = () => {
                      <Users size={28} className="text-blue-400" />
                    </div>
                    <p className="text-lg font-medium text-slate-300">Cubrir {recoverableHours} horas/mes recuperables de trabajo manual</p>
-                   <p className="text-sm text-slate-500 mt-2">Equivale a {halfTimePeopleEquivalent} personas de medio tiempo (~₡{formatCRC(recoverableCostEquivalent)}/mes).</p>
+                   <p className="text-sm text-slate-500 mt-2">Equivale a {fullTimePeopleEquivalent} personas de tiempo completo (~₡{formatCRC(recoverableCostEquivalent)}/mes).</p>
                  </div>
                </FadeInUp>
                <FadeInUp delay={0.2}>
